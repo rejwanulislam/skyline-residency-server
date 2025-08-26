@@ -30,6 +30,7 @@ async function run() {
         const apartmentCollection = client.db("Skyline-Residency").collection("apartment")
         const agreementCollection = client.db("Skyline-Residency").collection("agreement")
         const userCollection = client.db("Skyline-Residency").collection("user")
+        const announcementCollection = client.db("Skyline-Residency").collection("announcement")
         const paymentHistoryCollection = client.db("Skyline-Residency").collection("paymentHistory")
 
         //jwt
@@ -54,7 +55,7 @@ async function run() {
             })
         }
         //cupon
-        app.post('/cuppon', async (req, res) => {
+        app.post('/cuppon',veryfyToken, async (req, res) => {
             const data = req.body
             const result = await cupponCollection.insertOne(data)
             res.send(result)
@@ -65,7 +66,7 @@ async function run() {
             res.send(result)
         })
 
-        app.patch('/cuppon/:id', async (req, res) => {
+        app.patch('/cuppon/:id',veryfyToken, async (req, res) => {
             const id = req.params.id
             const data = req.body
             console.log(id)
@@ -81,7 +82,7 @@ async function run() {
             const result = await cupponCollection.updateOne(quary,updateDoc)
              res.send(result)
         })
-        app.delete('/cuppon/:id', async (req, res) => {
+        app.delete('/cuppon/:id',veryfyToken, async (req, res) => {
             const id = req.params.id;
             console.log(id)
             const quary = { _id: new ObjectId(id) }
@@ -170,6 +171,17 @@ async function run() {
             const result = await userCollection.updateOne(emailAndMembetFilter, UpdateEmailAndMember)
             const result2 = await agreementCollection.updateOne(idFilter, updatedstatus)
             res.send({ result, result2 })
+        })
+
+        //Make announcement
+        app.post('/announcement',veryfyToken,async(req,res)=>{
+            const data=req.body
+            const result= await announcementCollection.insertOne(data)
+            res.send(result)
+        })
+        app.get('/announcement',veryfyToken, async (req,res)=>{
+            const result = await announcementCollection.find().toArray()
+            res.send(result)
         })
 
         //get user role
