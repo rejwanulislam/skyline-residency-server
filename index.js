@@ -116,7 +116,7 @@ async function run() {
 
         //user
         //post user data
-        app.post('/user', veryfyToken, async (req, res) => {
+        app.post('/user', async (req, res) => {
             const userData = req.body
             const result = await userCollection.insertOne(userData)
             res.send(result)
@@ -185,13 +185,14 @@ async function run() {
         })
 
         //get user role
-        app.get('/user/:email', async (req, res) => {
-            const userEmail = req.params.email
+        app.get('/userRole', async (req, res) => {
+            const userEmail = req.query.email
+            console.log(userEmail)
             const quary = { email: userEmail }
             const data = await userCollection.findOne(quary)
 
             let role = 'user'
-            if (data?.role == 'admin') {
+            if (data?.role == 'admin') { 
                 role = 'admin'
             }
             if (data?.role == 'member') {
@@ -235,7 +236,16 @@ async function run() {
         app.get('/apartment', async (req, res) => {
             const page = parseInt(req.query.page)
             const size = parseInt(req.query.size)
-            const result = await apartmentCollection.find()
+            const minRent=req.query.minRent
+            const maxRent=req.query.maxRent
+            let quary={}
+            if(minRent&&maxRent){
+                 quary.rent={
+                    $gte:parseInt(minRent),
+                    $lte:parseInt(maxRent)
+                }
+            }
+            const result = await apartmentCollection.find(quary)
                 .skip(page * size)
                 .limit(size)
                 .toArray();
@@ -244,10 +254,10 @@ async function run() {
 
 
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+       // await client.connect();
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+       // await client.db("admin").command({ ping: 1 });
+       // console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
         // await client.close();
