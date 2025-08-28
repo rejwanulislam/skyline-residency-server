@@ -3,7 +3,8 @@
 This is the **Backend API** for the Skyline Residency Building Management System (BMS). It handles authentication, apartments, agreements, payments, coupons, announcements, and role-based access for users, members, and admins.
 
 ## Live Site
-Frontend Live: [Skyline Residency Live](https://skyline-residency.web.app)
+Frontend Live: [Skyline Residency Fontend Live](https://skyline-residency.web.app)
+Backend Live: [Skyline Residency Backend Live](https://skyline-residency-server.vercel.app)
 
 ## Repositories
 Frontend Repository: [Client GitHub Repo](https://github.com/RejwanulIslam/skyline-residency-client)  
